@@ -36,6 +36,8 @@ class Blog:
         new_blog=Blog(id,title,content,author)
         print(f"{new_blog} is created succesfully")
         return new_blog
-
+def main():
+    blog1=Blog(1,"recipes","how to cook cupcakes")
+    blog2=Blog(2,"vlog","one day with me during midtetm session")
 
 
