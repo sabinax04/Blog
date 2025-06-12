@@ -1,11 +1,14 @@
 class Blog:
+
     all_blogs=[]
+    
     def __init__(self,id,title,content,author=None):
         self.id=id
         self.title=title
         self.content=content
         self.author=author
         Blog.all_blogs.append(self)
+
     def show(self):
         return{
             "ID": self.id,
@@ -16,29 +19,33 @@ class Blog:
     
     @staticmethod
     def get_blog():
+
         if not Blog.all_blogs:
             print("No blogs available")
+
         else:
             print("\n Blog list:")
             for blog in Blog.all_blogs:
                 print(blog.show())
+
     def __str__(self):
         return  f"ID: {self.id}, Title: {self.title}, Content: {self.content}, Author: {self.author.username}"
     
     @staticmethod
     def create_blog(author):
+
         if not author.isAuthor:
             print("you cannot create blog")
             return None
+        
         title=input("enter your title to create blog: ")
         content=input("enter the content of your title: ")
         id=len(Blog.all_blogs)+1
         new_blog=Blog(id,title,content,author)
         print(f"{new_blog} is created succesfully")
         return new_blog
-    def default_blogs():
-        user1 = User("john_doe", "password123", isAuthor=True)
-        blog1=Blog(1,"recipes","how to cook cupcakes",user1)
-        blog2=Blog(2,"vlog","one day with me during midtetm session",user1)
+
+blog1=Blog(1,"recipes","how to cook cupcakes")
+blog2=Blog(2,"vlog","one day with me during midtetm session")
 
 
