@@ -52,9 +52,21 @@ class User:
         else:
             return None
 
-
+# import sqlite3#i will correct
+# # create a table  
+#     cu.execute("create table lang(name, first_appeared)")  
+  
+#     # insert values into a table  
+#     cu.execute("insert into lang values (?, ?)", ("C", 1972))  
+  
+#     # execute a query and iterate over the result  
+#     for row in cu.execute("select * from lang"):  
+#         print(row)  
+  
+#     cx.close()
 class Blog:
     all_blogs = []
+    personal_blogs=[]
 
     def __init__(self, id, title, content, author=None):
         self.id = id
@@ -86,6 +98,7 @@ class Blog:
 
     @staticmethod
     def create_blog(author):
+        
         if not author.isAuthor:
             print("You are not allowed to create blogs.\n")
             return None
@@ -95,6 +108,8 @@ class Blog:
         id = len(Blog.all_blogs) + 1
         new_blog = Blog(id, title, content, author)
 
+        Blog.personal_blogs.append(new_blog)
+
         print(f"\n{new_blog} is created successfully!\n")
         return new_blog
 
@@ -103,6 +118,13 @@ class Blog:
         user1 = User("john_doe", 1234, isAuthor=True)
         blog1 = Blog(1, "Recipes", "How to cook cupcakes", user1)
         blog2 = Blog(2, "Vlog", "One day with me during midterm session", user1)
+
+    def update_blog(blog,new_title=None,new_content=None):
+        if new_title:
+            blog.title=new_title
+        if new_content:
+            blog.content=new_content
+                
 
 
 def main():
@@ -149,6 +171,21 @@ def main():
                 print("\nYou can only view blogs.")
                 Blog.get_blog()
                 print("Logging out...\n")
+                break
+        while True:
+            update=input("Do you want to update your blog? 1.yes 2.no ")
+            if update:
+                blog_id=input(f"enter the id of blog you want to update: ")
+                for blog in Blog.personal_blogs:
+                    if blog.id==blog_id:
+                        blog_to_update=blog
+                        break
+                if blog_to_update:
+                    new_title=input(f"enter new title instead {blog_to_update.title} : ")
+                    new_content=input(f"enter new content instead {blog_to_update.content} : ")
+
+                    Blog.update_blog(blog_to_update,new_title,new_content)
+            else:
                 break
 
 main()
