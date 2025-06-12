@@ -1,42 +1,78 @@
 class User:
+    users = []  
+
     def __init__(self, username, password, isAuthor):
         self.username = username
         self.password = password
         self.isAuthor = isAuthor
-    
+
     @staticmethod
     def register():
-        role_choice = input("Are you author or username: \n"
-                         + "1. Author \n"
-                         + "2. User \n"
-                         + "Choose one number ! ")
-        
-        username = input("Please enter your username: ")
-        password = int(input("Please enter your password (as number): "))
+        print("\n--- Sign Up ---")
+        role_choice = input("Who are you? \n1. Author \n2. User \nChoose (1/2): ")
 
-        if role_choice == "1":
-            isAuthor = True
+        username = input("Enter username: ")
+
+        
+        password_input = input("Enter password (numbers only): ")
+        if not password_input.isdigit():
+            print("Password must be numeric!")
+            return None
+        
+        password = int(password_input)
+
+        isAuthor = True if role_choice == "1" else False
+
+        new_user = User(username, password, isAuthor)
+        User.users.append(new_user)
+
+        print(f"Account created for {username} as {'Author' if isAuthor else 'User'}.\n")
+        return new_user
+
+    @staticmethod
+    def login():
+        print("\n--- Login ---")
+        username = input("Enter username: ")
+        password_input = input("Enter password (numbers only): ")
+
+        if not password_input.isdigit():
+            print("Password must be numeric!")
+            return None
+
+        password = int(password_input)
+
+        for user in User.users:
+            if user.username == username and user.password == password:
+                print(f"Welcome back, {user.username}!")
+                return user
+
+        print("Account not found!")
+        choice = input("Do you want to sign up? (yes/no): ")
+        if choice.lower() == "yes":
+            return User.register()
         else:
-             isAuthor = False
+            return None
         
-        return User(username, password, isAuthor)
-    
 
-    def login(self):
-        newUserName = input("Please enter your username: ")
-        newPassword = int(input("Please enter your password: "))
+def main():
+    print("Welcome to the Blog!")
 
-        if self.username == newUserName and self.password == newPassword:
-            print("Welcome to our blog, " + self.username)
-        
+    while True:
+        action = input("Do you want to (1) Login or (2) Sign Up? (type 'exit' to quit): ")
+
+        if action == "1":
+            logged_user = User.login()
+            if logged_user:
+                if logged_user.isAuthor:
+                    print("You can view and write blog posts.")
+                else:
+                    print("You can only view blog posts.")
+        elif action == "2":
+            User.register()
+        elif action.lower() == "exit":
+            print("Bye!")
+            break
         else:
-            print("We didn't find your account !")
-            question = input("Do you want to create your account ? (yes / no)")
+            print("Invalid choice!")
 
-            if question.lower() == "yes":
-                new_user = User.register()
-                print("Account is created for " + new_user.username)
-       
-                
-new_user = User.register()
-new_user.login()
+main()
