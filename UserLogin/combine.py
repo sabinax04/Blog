@@ -52,18 +52,7 @@ class User:
         else:
             return None
 
-# import sqlite3#i will correct
-# # create a table  
-#     cu.execute("create table lang(name, first_appeared)")  
-  
-#     # insert values into a table  
-#     cu.execute("insert into lang values (?, ?)", ("C", 1972))  
-  
-#     # execute a query and iterate over the result  
-#     for row in cu.execute("select * from lang"):  
-#         print(row)  
-  
-#     cx.close()
+
 class Blog:
     all_blogs = []
     personal_blogs=[]
@@ -119,11 +108,24 @@ class Blog:
         blog1 = Blog(1, "Recipes", "How to cook cupcakes", user1)
         blog2 = Blog(2, "Vlog", "One day with me during midterm session", user1)
 
+    @staticmethod
+    def get_my_personal_blogs():
+        if not Blog.personal_blogs:
+            print("you dont have any blog")
+        else:
+            for blog in Blog.personal_blogs:
+                print(blog.show())
+
+    @staticmethod
     def update_blog(blog,new_title=None,new_content=None):
+        if not Blog.personal_blogs:
+            return None
         if new_title:
             blog.title=new_title
         if new_content:
             blog.content=new_content
+        print(f"Blog '{blog.title}' updated successfully!")
+
                 
 
 
@@ -156,7 +158,9 @@ def main():
                 print("1. View all blogs")
                 print("2. Create a blog")
                 print("3. Logout")
-                choice = input("Choose (1/2/3): ")
+                print("4. View my blogs")
+                print("5. Update your blog")
+                choice = input("Choose (1/2/3/4/5): ")
 
                 if choice == "1":
                     Blog.get_blog()
@@ -165,6 +169,24 @@ def main():
                 elif choice == "3":
                     print("Logged out.\n")
                     break
+                elif choice=="4":
+                    Blog.get_my_personal_blogs()
+                elif choice=="5":
+                        update=input("Do you want to update your blog? 1.yes 2.no ")
+                        if update=="1":
+                            blog_id=input(f"enter the id of blog you want to update: ")
+                            blog_to_update=0
+                            for blog in Blog.personal_blogs:
+                                if str(blog.id)==blog_id:
+                                    blog_to_update=blog
+                                    break
+                            if blog_to_update:
+                                new_title=input(f"enter new title instead {blog_to_update.title} : ")
+                                new_content=input(f"enter new content instead {blog_to_update.content} : ")
+
+                                Blog.update_blog(blog_to_update,new_title,new_content)
+                        elif update=="2":
+                            break
                 else:
                     print("Invalid choice!")
             else:
@@ -172,20 +194,6 @@ def main():
                 Blog.get_blog()
                 print("Logging out...\n")
                 break
-        while True:
-            update=input("Do you want to update your blog? 1.yes 2.no ")
-            if update:
-                blog_id=input(f"enter the id of blog you want to update: ")
-                for blog in Blog.personal_blogs:
-                    if blog.id==blog_id:
-                        blog_to_update=blog
-                        break
-                if blog_to_update:
-                    new_title=input(f"enter new title instead {blog_to_update.title} : ")
-                    new_content=input(f"enter new content instead {blog_to_update.content} : ")
-
-                    Blog.update_blog(blog_to_update,new_title,new_content)
-            else:
-                break
+       
 
 main()
